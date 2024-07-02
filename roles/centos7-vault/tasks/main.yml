@@ -1,0 +1,25 @@
+- name: Check if OS is CentOS 7
+  set_fact:
+    is_centos7: "{{ ansible_distribution == 'CentOS' and ansible_distribution_major_version == '7' }}"
+
+- name: Create the Vault repo file if OS is CentOS 7
+  template:
+    src: vault.repo.j2
+    dest: /etc/yum.repos.d/vault.repo
+  when: is_centos7
+
+- name: Find CentOS repo files
+  find:
+    paths: /etc/yum.repos.d/
+    patterns: 'CentOS-*'
+  register: repo_files
+
+- name: Comment out mirrorlist
+  command: "sed -i 's/mirrorlist/#mirrorlist/g' {{ item.path }}"
+  loop: "{{ repo_files.files }}"
+  when: repo_files.matched > 0 and is_centos7
+
+- name: Set baseurl to vault.centos.org
+  command: "sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' {{ item.path }}"
+  loop: "{{ repo_files.files }}"
+  when: repo_files.matched > 0 and is_centos7
