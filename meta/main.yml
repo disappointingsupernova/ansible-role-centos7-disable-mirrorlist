@@ -1,0 +1,16 @@
+galaxy_info:
+  author: DisappointingSupernova
+  description: Ansible role for CentOS 7 that disables mirrorlist and sets baseurl to vault.centos.org
+
+  issue_tracker_url: https://github.com/disappointingsupernova/ansible-role-centos7-disable-mirrorlist/issues
+
+  license: license (GPL-2.0-or-later, MIT, etc)
+
+  min_ansible_version: 2.1
+
+  platforms:
+  - name: CentOS
+    versions:
+      - 7
+
+dependencies: []
